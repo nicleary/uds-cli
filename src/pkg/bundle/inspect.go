@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -26,7 +26,7 @@ import (
 	zarfUtils "github.com/zarf-dev/zarf/src/pkg/utils"
 )
 
-// Inspect pulls/unpacks a bundle's metadata and shows it
+// Inspect pulls/unpacks a Bundle's metadata and shows it
 func (b *Bundle) Inspect() error {
 	// print to stdout to enable users to easily grab the output
 	pterm.SetDefaultOutput(os.Stdout)
@@ -34,7 +34,7 @@ func (b *Bundle) Inspect() error {
 
 	if err := utils.CheckYAMLSourcePath(b.cfg.InspectOpts.Source); err == nil {
 		b.cfg.InspectOpts.IsYAMLFile = true
-		if err := utils.ReadYAMLStrict(b.cfg.InspectOpts.Source, &b.bundle); err != nil {
+		if err := utils.ReadYAMLStrict(b.cfg.InspectOpts.Source, &b.Bundle); err != nil {
 			return err
 		}
 	} else {
@@ -51,7 +51,7 @@ func (b *Bundle) Inspect() error {
 			return err
 		}
 
-		// pull the bundle's metadata + sig + sboms (optional)
+		// pull the Bundle's metadata + sig + sboms (optional)
 		filepaths, err := provider.LoadBundleMetadata()
 		if err != nil {
 			return err
@@ -62,14 +62,14 @@ func (b *Bundle) Inspect() error {
 			return err
 		}
 
-		// read the bundle's metadata into memory
-		if err := utils.ReadYAMLStrict(filepaths[config.BundleYAML], &b.bundle); err != nil {
+		// read the Bundle's metadata into memory
+		if err := utils.ReadYAMLStrict(filepaths[config.BundleYAML], &b.Bundle); err != nil {
 			return err
 		}
 
 		// pull sbom
 		if b.cfg.InspectOpts.IncludeSBOM {
-			warns, err = provider.CreateBundleSBOM(b.cfg.InspectOpts.ExtractSBOM, b.bundle.Metadata.Name)
+			warns, err = provider.CreateBundleSBOM(b.cfg.InspectOpts.ExtractSBOM, b.Bundle.Metadata.Name)
 			if err != nil {
 				return err
 			}
@@ -97,15 +97,15 @@ func (b *Bundle) Inspect() error {
 	// If the user is not skipping validation amd did not choose a mode that already
 	// loaded package metadata (like --list-variables/--list-images), verify packages now.
 	if !config.CommonOptions.SkipSignatureValidation {
-		for _, pkg := range b.bundle.Packages {
+		for _, pkg := range b.Bundle.Packages {
 			if _, err := b.getMetadata(pkg); err != nil {
 				return err
 			}
 		}
 	}
 
-	if err := zarfUtils.ColorPrintYAML(b.bundle, nil, false); err != nil {
-		message.Warn("error printing bundle yaml")
+	if err := zarfUtils.ColorPrintYAML(b.Bundle, nil, false); err != nil {
+		message.Warn("error printing Bundle yaml")
 	}
 
 	// print warnings to stderr
@@ -121,7 +121,7 @@ func (b *Bundle) listImages() error {
 	// find images in the packages taking into account optional components
 	pkgImgMap := make(map[string][]string)
 
-	for _, pkg := range b.bundle.Packages {
+	for _, pkg := range b.Bundle.Packages {
 		pkgImgMap[pkg.Name] = make([]string, 0)
 
 		zarfPkg, err := b.getMetadata(pkg)
@@ -153,12 +153,12 @@ func (b *Bundle) listImages() error {
 	return nil
 }
 
-// listVariables prints the variables and overrides for each package in the bundle
+// listVariables prints the variables and overrides for each package in the Bundle
 func (b *Bundle) listVariables() error {
 	message.HorizontalRule()
 	message.Title("Overrides and Variables:", "configurable helm overrides and Zarf variables by package")
 
-	for _, pkg := range b.bundle.Packages {
+	for _, pkg := range b.Bundle.Packages {
 		zarfPkg, err := b.getMetadata(pkg)
 		if err != nil {
 			return err
@@ -196,7 +196,7 @@ func (b *Bundle) getMetadata(pkg types.Package) (v1alpha1.ZarfPackage, error) {
 		publicKeyPath = ""
 	}
 
-	// if we are inspecting a built bundle, get the metadata from the bundle
+	// if we are inspecting a built Bundle, get the metadata from the Bundle
 	if !b.cfg.InspectOpts.IsYAMLFile {
 		pkgTmp, err := zarfUtils.MakeTempDir(config.CommonOptions.TempDirectory)
 		if err != nil {
@@ -227,7 +227,7 @@ func (b *Bundle) getMetadata(pkg types.Package) (v1alpha1.ZarfPackage, error) {
 	// otherwise we are inspecting a yaml file, get the metadata from the packages directly
 	sourceDir := strings.TrimSuffix(b.cfg.InspectOpts.Source, config.BundleYAML)
 
-	source, err := utils.GetPkgSource(pkg, config.GetArch(b.bundle.Metadata.Architecture), sourceDir)
+	source, err := utils.GetPkgSource(pkg, config.GetArch(b.Bundle.Metadata.Architecture), sourceDir)
 	if err != nil {
 		return v1alpha1.ZarfPackage{}, err
 	}
@@ -240,7 +240,7 @@ func (b *Bundle) getMetadata(pkg types.Package) (v1alpha1.ZarfPackage, error) {
 	loadOpts := packager.LoadOptions{
 		Filter:               filters.Empty(),
 		VerificationStrategy: utils.GetPackageVerificationStrategy(config.CommonOptions.SkipSignatureValidation),
-		Architecture:         config.GetArch(b.bundle.Metadata.Architecture),
+		Architecture:         config.GetArch(b.Bundle.Metadata.Architecture),
 		PublicKeyPath:        publicKeyPath,
 		CachePath:            config.CommonOptions.CachePath,
 		RemoteOptions:        remoteOpts,

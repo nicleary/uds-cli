@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -21,7 +21,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-// Remove removes packages deployed from a bundle
+// Remove removes packages deployed from a Bundle
 func (b *Bundle) Remove() error {
 	// Check that provided oci source path is valid, and update it if it's missing the full path
 	source, err := CheckOCISourcePath(b.cfg.RemoveOpts.Source)
@@ -42,14 +42,14 @@ func (b *Bundle) Remove() error {
 		return err
 	}
 
-	// pull the bundle's metadata + sig
+	// pull the Bundle's metadata + sig
 	filepaths, err := provider.LoadBundleMetadata()
 	if err != nil {
 		return err
 	}
 
-	// read the bundle's metadata into memory
-	if err := utils.ReadYAMLStrict(filepaths[config.BundleYAML], &b.bundle); err != nil {
+	// read the Bundle's metadata into memory
+	if err := utils.ReadYAMLStrict(filepaths[config.BundleYAML], &b.Bundle); err != nil {
 		return err
 	}
 
@@ -58,7 +58,7 @@ func (b *Bundle) Remove() error {
 
 	if len(b.cfg.RemoveOpts.Packages) != 0 {
 		userSpecifiedPackages := strings.Split(strings.ReplaceAll(b.cfg.RemoveOpts.Packages[0], " ", ""), ",")
-		for _, pkg := range b.bundle.Packages {
+		for _, pkg := range b.Bundle.Packages {
 			if slices.Contains(userSpecifiedPackages, pkg.Name) {
 				packagesToRemove = append(packagesToRemove, pkg)
 			}
@@ -70,7 +70,7 @@ func (b *Bundle) Remove() error {
 		}
 		return removePackages(packagesToRemove)
 	}
-	return removePackages(b.bundle.Packages)
+	return removePackages(b.Bundle.Packages)
 }
 
 func removePackages(packagesToRemove []types.Package) error {

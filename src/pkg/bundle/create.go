@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -22,19 +22,19 @@ import (
 	"helm.sh/helm/v3/pkg/chartutil"
 )
 
-// Create creates a bundle
+// Create creates a Bundle
 func (b *Bundle) Create(ctx context.Context) error {
-	// read the bundle's metadata into memory
-	if err := utils.ReadYAMLStrict(filepath.Join(b.cfg.CreateOpts.SourceDirectory, b.cfg.CreateOpts.BundleFile), &b.bundle); err != nil {
+	// read the Bundle's metadata into memory
+	if err := utils.ReadYAMLStrict(filepath.Join(b.cfg.CreateOpts.SourceDirectory, b.cfg.CreateOpts.BundleFile), &b.Bundle); err != nil {
 		return err
 	}
 
-	// set the bundle's name and version if provided via flag
+	// set the Bundle's name and version if provided via flag
 	if b.cfg.CreateOpts.Name != "" {
-		b.bundle.Metadata.Name = b.cfg.CreateOpts.Name
+		b.Bundle.Metadata.Name = b.cfg.CreateOpts.Name
 	}
 	if b.cfg.CreateOpts.Version != "" {
-		b.bundle.Metadata.Version = b.cfg.CreateOpts.Version
+		b.Bundle.Metadata.Version = b.cfg.CreateOpts.Version
 	}
 
 	// Populate values from valuesFiles if provided
@@ -44,10 +44,10 @@ func (b *Bundle) Create(ctx context.Context) error {
 
 	// confirm creation
 	if ok := b.confirmBundleCreation(); !ok {
-		return errors.New("bundle creation cancelled")
+		return errors.New("Bundle creation cancelled")
 	}
 
-	// make the bundle's build information
+	// make the Bundle's build information
 	if err := b.CalculateBuildInfo(); err != nil {
 		return err
 	}
@@ -56,11 +56,11 @@ func (b *Bundle) Create(ctx context.Context) error {
 	zarfConfig.CommonOptions.PlainHTTP = config.CommonOptions.Insecure
 	zarfConfig.CommonOptions.InsecureSkipTLSVerify = config.CommonOptions.Insecure
 
-	validateSpinner := message.NewProgressSpinner("Validating bundle")
+	validateSpinner := message.NewProgressSpinner("Validating Bundle")
 
 	defer validateSpinner.Stop()
 
-	// validate bundle / verify access to all repositories
+	// validate Bundle / verify access to all repositories
 	if err := b.ValidateBundleResources(validateSpinner); err != nil {
 		return err
 	}
@@ -68,11 +68,11 @@ func (b *Bundle) Create(ctx context.Context) error {
 	validateSpinner.Successf("Bundle Validated")
 	pterm.Print()
 
-	// sign the bundle if a signing key was provided
+	// sign the Bundle if a signing key was provided
 	if b.cfg.CreateOpts.SigningKeyPath != "" {
-		// write the bundle to disk so we can sign it
+		// write the Bundle to disk so we can sign it
 		bundlePath := filepath.Join(b.tmp, config.BundleYAML)
-		if err := zarfUtils.WriteYaml(bundlePath, &b.bundle, 0o600); err != nil {
+		if err := zarfUtils.WriteYaml(bundlePath, &b.Bundle, 0o600); err != nil {
 			return err
 		}
 
@@ -83,7 +83,7 @@ func (b *Bundle) Create(ctx context.Context) error {
 			return interactive.PromptSigPassword()
 		}
 
-		// sign the bundle
+		// sign the Bundle
 		signBlobOptions := zarfUtils.DefaultSignBlobOptions()
 		signBlobOptions.OutputSignature = filepath.Join(b.tmp, config.BundleYAMLSignature)
 		signBlobOptions.PassFunc = getSigCreatePassword
@@ -96,14 +96,14 @@ func (b *Bundle) Create(ctx context.Context) error {
 
 	// for dev mode update package ref for local bundles, refs for remote bundles updated on deploy
 	if config.Dev && len(b.cfg.DevDeployOpts.Ref) != 0 {
-		for i, pkg := range b.bundle.Packages {
+		for i, pkg := range b.Bundle.Packages {
 			pkg, _ = b.setPackageRef(pkg)
-			b.bundle.Packages[i] = pkg
+			b.Bundle.Packages[i] = pkg
 		}
 	}
 
 	opts := bundler.Options{
-		Bundle:    &b.bundle,
+		Bundle:    &b.Bundle,
 		Output:    b.cfg.CreateOpts.Output,
 		TmpDstDir: b.tmp,
 		SourceDir: b.cfg.CreateOpts.SourceDirectory,
@@ -113,10 +113,10 @@ func (b *Bundle) Create(ctx context.Context) error {
 	return bundlerClient.Create(ctx)
 }
 
-// confirmBundleCreation prompts the user to confirm bundle creation
+// confirmBundleCreation prompts the user to confirm Bundle creation
 func (b *Bundle) confirmBundleCreation() (confirm bool) {
 	message.HeaderInfof("🎁 BUNDLE DEFINITION")
-	if err := zarfUtils.ColorPrintYAML(b.bundle, nil, false); err != nil {
+	if err := zarfUtils.ColorPrintYAML(b.Bundle, nil, false); err != nil {
 		message.WarnErr(err, "unable to print yaml")
 	}
 
@@ -129,7 +129,7 @@ func (b *Bundle) confirmBundleCreation() (confirm bool) {
 	}
 
 	prompt := &survey.Confirm{
-		Message: "Create this bundle?",
+		Message: "Create this Bundle?",
 	}
 
 	if err := survey.AskOne(prompt, &confirm); err != nil || !confirm {
@@ -139,10 +139,10 @@ func (b *Bundle) confirmBundleCreation() (confirm bool) {
 	return true
 }
 
-// processValuesFiles reads values from valuesFiles and updates the bundle with the override values
+// processValuesFiles reads values from valuesFiles and updates the Bundle with the override values
 func (b *Bundle) processValuesFiles() error {
 	// Populate values from valuesFiles if provided
-	for i, pkg := range b.bundle.Packages {
+	for i, pkg := range b.Bundle.Packages {
 		for componentName, overrides := range pkg.Overrides {
 			for chartName, bundleChartOverrides := range overrides {
 				valuesFilesToMerge := make([][]types.BundleChartValue, 0)
@@ -167,11 +167,11 @@ func (b *Bundle) processValuesFiles() error {
 						valuesFilesToMerge = append(valuesFilesToMerge, valuesFileValues)
 					}
 				}
-				override := b.bundle.Packages[i].Overrides[componentName][chartName]
+				override := b.Bundle.Packages[i].Overrides[componentName][chartName]
 				// add override values to the end of the list of values to merge since we want them to take precedence
 				valuesFilesToMerge = append(valuesFilesToMerge, override.Values)
 				override.Values = mergeBundleChartValues(valuesFilesToMerge...)
-				b.bundle.Packages[i].Overrides[componentName][chartName] = override
+				b.Bundle.Packages[i].Overrides[componentName][chartName] = override
 			}
 		}
 	}

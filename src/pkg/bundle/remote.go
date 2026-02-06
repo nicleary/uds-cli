@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -50,10 +50,10 @@ func (op *ociProvider) getBundleManifest() (*oci.Manifest, error) {
 	if op.rootManifest != nil {
 		return op.rootManifest, nil
 	}
-	return nil, errors.New("bundle root manifest not loaded")
+	return nil, errors.New("Bundle root manifest not loaded")
 }
 
-// LoadBundleMetadata loads a remote bundle's metadata
+// LoadBundleMetadata loads a remote Bundle's metadata
 func (op *ociProvider) LoadBundleMetadata() (types.PathMap, error) {
 	ctx := context.TODO()
 	if err := helpers.CreateDirectory(filepath.Join(op.dst, config.BlobsDir), 0700); err != nil {
@@ -77,13 +77,13 @@ func (op *ociProvider) LoadBundleMetadata() (types.PathMap, error) {
 	}
 
 	if len(filepaths) == 0 {
-		return nil, errors.New("failed to load bundle metadata from " + op.src)
+		return nil, errors.New("failed to load Bundle metadata from " + op.src)
 	}
 
 	return filepaths, nil
 }
 
-// CreateBundleSBOM creates a bundle-level SBOM from the underlying Zarf packages, if the Zarf package contains an SBOM
+// CreateBundleSBOM creates a Bundle-level SBOM from the underlying Zarf packages, if the Zarf package contains an SBOM
 func (op *ociProvider) CreateBundleSBOM(extractSBOM bool, bundleName string) ([]string, error) {
 	var warns []string
 	ctx := context.TODO()
@@ -130,12 +130,12 @@ func (op *ociProvider) CreateBundleSBOM(extractSBOM bool, bundleName string) ([]
 	return utils.HandleSBOM(extractSBOM, SBOMArtifactPathMap, bundleName, op.dst)
 }
 
-// LoadBundle loads a bundle from a remote source
+// LoadBundle loads a Bundle from a remote source
 func (op *ociProvider) LoadBundle(opts types.BundlePullOptions, _ int) (*types.UDSBundle, types.PathMap, error) {
 	ctx := context.TODO()
 	var bundle types.UDSBundle
 
-	// pull the bundle's metadata + sig
+	// pull the Bundle's metadata + sig
 	filepaths, err := op.LoadBundleMetadata()
 	if err != nil {
 		return nil, nil, err
@@ -144,18 +144,18 @@ func (op *ociProvider) LoadBundle(opts types.BundlePullOptions, _ int) (*types.U
 		return nil, nil, err
 	}
 
-	// validate the sig (if present) before pulling the whole bundle
+	// validate the sig (if present) before pulling the whole Bundle
 	if err := ValidateBundleSignature(filepaths[config.BundleYAML], filepaths[config.BundleYAMLSignature], opts.PublicKeyPath); err != nil {
 		return nil, nil, err
 	}
 
 	var layersToPull []ocispec.Descriptor
-	// need to keep track of all the bundle layers (pulled and cached)
+	// need to keep track of all the Bundle layers (pulled and cached)
 	var bundleLayers []ocispec.Descriptor
 
 	estimatedBytes := int64(0)
 
-	// get the bundle's root manifest
+	// get the Bundle's root manifest
 	rootManifest, err := op.getBundleManifest()
 	if err != nil {
 		return nil, nil, err
@@ -169,7 +169,7 @@ func (op *ociProvider) LoadBundle(opts types.BundlePullOptions, _ int) (*types.U
 		return nil, nil, err
 	}
 
-	// grab the bundle root manifest and add it to the layers to pull
+	// grab the Bundle root manifest and add it to the layers to pull
 	bundleRootDesc, err := op.ResolveRoot(ctx)
 	if err != nil {
 		return nil, nil, err
@@ -248,7 +248,7 @@ func getOCIValidatedSource(source string) (string, error) {
 	}
 	// if root didn't resolve, expand the path
 	if err != nil {
-		// Check in ghcr uds bundle path
+		// Check in ghcr uds Bundle path
 		source = GHCRUDSBundlePath + originalSource
 		remote, err = zoci.NewRemote(ctx, source, platform)
 		if err == nil {
@@ -256,7 +256,7 @@ func getOCIValidatedSource(source string) (string, error) {
 		}
 		if err != nil {
 			message.Debug(err)
-			// Check in delivery bundle path
+			// Check in delivery Bundle path
 			source = GHCRDeliveryBundlePath + originalSource
 			remote, err = zoci.NewRemote(ctx, source, platform)
 			if err == nil {
@@ -264,7 +264,7 @@ func getOCIValidatedSource(source string) (string, error) {
 			}
 			if err != nil {
 				message.Debug()
-				// Check in packages bundle path
+				// Check in packages Bundle path
 				source = GHCRPackagesPath + originalSource
 				remote, err = zoci.NewRemote(ctx, source, platform)
 				if err == nil {
@@ -287,7 +287,7 @@ func getOCIValidatedSource(source string) (string, error) {
 
 // ValidateArch validates that the passed in arch matches the cluster arch
 func ValidateArch(arch string) error {
-	// compare bundle arch and cluster arch
+	// compare Bundle arch and cluster arch
 	clusterArchs := []string{}
 	c, err := cluster.New(context.TODO())
 	if err != nil {
@@ -304,7 +304,7 @@ func ValidateArch(arch string) error {
 			clusterArchs = append(clusterArchs, node.Status.NodeInfo.Architecture)
 		}
 
-		// check if bundle arch is in clusterArchs
+		// check if Bundle arch is in clusterArchs
 		if !slices.Contains(clusterArchs, arch) {
 			return fmt.Errorf("arch %s does not match cluster arch, %s", arch, clusterArchs)
 		}

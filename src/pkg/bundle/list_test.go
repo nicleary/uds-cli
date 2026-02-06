@@ -12,7 +12,7 @@ import (
 )
 
 func TestMapPackagesToBundles(t *testing.T) {
-	t.Run("groups packages by bundle name and version", func(t *testing.T) {
+	t.Run("groups packages by Bundle name and version", func(t *testing.T) {
 		deployedPackages := []state.DeployedPackage{
 			{
 				Name: "podinfo",
@@ -21,7 +21,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "podinfo",
 						Version: "6.4.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "demo-bundle",
+							AnnotationBundleName:    "demo-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -34,7 +34,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "prometheus",
 						Version: "2.45.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "demo-bundle",
+							AnnotationBundleName:    "demo-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -45,14 +45,14 @@ func TestMapPackagesToBundles(t *testing.T) {
 		bundles := mapPackagesToBundles(deployedPackages)
 
 		require.Equal(t, 1, len(bundles))
-		require.Equal(t, "demo-bundle", bundles[0].Name)
+		require.Equal(t, "demo-Bundle", bundles[0].Name)
 		require.Equal(t, "1.0.0", bundles[0].Version)
 		require.Equal(t, 2, len(bundles[0].Packages))
 		require.Contains(t, bundles[0].Packages, "podinfo:6.4.0")
 		require.Contains(t, bundles[0].Packages, "prometheus:2.45.0")
 	})
 
-	t.Run("filters out packages without bundle annotations", func(t *testing.T) {
+	t.Run("filters out packages without Bundle annotations", func(t *testing.T) {
 		deployedPackages := []state.DeployedPackage{
 			{
 				Name: "init",
@@ -71,7 +71,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "podinfo",
 						Version: "6.4.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "demo-bundle",
+							AnnotationBundleName:    "demo-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -82,7 +82,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 		bundles := mapPackagesToBundles(deployedPackages)
 
 		require.Equal(t, 1, len(bundles))
-		require.Equal(t, "demo-bundle", bundles[0].Name)
+		require.Equal(t, "demo-Bundle", bundles[0].Name)
 		require.Equal(t, 1, len(bundles[0].Packages))
 	})
 
@@ -95,7 +95,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "podinfo",
 						Version: "6.4.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "demo-bundle",
+							AnnotationBundleName:    "demo-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -108,7 +108,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "nginx",
 						Version: "1.25.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "web-bundle",
+							AnnotationBundleName:    "web-Bundle",
 							AnnotationBundleVersion: "2.1.0",
 						},
 					},
@@ -120,11 +120,11 @@ func TestMapPackagesToBundles(t *testing.T) {
 
 		require.Equal(t, 2, len(bundles))
 		// Bundles should be sorted alphabetically by name
-		require.Equal(t, "demo-bundle", bundles[0].Name)
-		require.Equal(t, "web-bundle", bundles[1].Name)
+		require.Equal(t, "demo-Bundle", bundles[0].Name)
+		require.Equal(t, "web-Bundle", bundles[1].Name)
 	})
 
-	t.Run("handles same bundle name with different versions", func(t *testing.T) {
+	t.Run("handles same Bundle name with different versions", func(t *testing.T) {
 		deployedPackages := []state.DeployedPackage{
 			{
 				Name: "pkg-v1",
@@ -133,7 +133,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "pkg-v1",
 						Version: "1.0.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "my-bundle",
+							AnnotationBundleName:    "my-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -146,7 +146,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "pkg-v2",
 						Version: "2.0.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "my-bundle",
+							AnnotationBundleName:    "my-Bundle",
 							AnnotationBundleVersion: "2.0.0",
 						},
 					},
@@ -157,7 +157,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 		bundles := mapPackagesToBundles(deployedPackages)
 
 		require.Equal(t, 2, len(bundles))
-		// Should be sorted by version within the same bundle name
+		// Should be sorted by version within the same Bundle name
 		require.Equal(t, "1.0.0", bundles[0].Version)
 		require.Equal(t, "2.0.0", bundles[1].Version)
 		require.Equal(t, 1, len(bundles[0].Packages))
@@ -173,8 +173,8 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "pkg-no-version",
 						Version: "1.0.0",
 						Annotations: map[string]string{
-							AnnotationBundleName: "incomplete-bundle",
-							// Missing bundle version
+							AnnotationBundleName: "incomplete-Bundle",
+							// Missing Bundle version
 						},
 					},
 				},
@@ -187,7 +187,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Version: "1.0.0",
 						Annotations: map[string]string{
 							AnnotationBundleVersion: "1.0.0",
-							// Missing bundle name
+							// Missing Bundle name
 						},
 					},
 				},
@@ -199,7 +199,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "pkg-complete",
 						Version: "1.0.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "complete-bundle",
+							AnnotationBundleName:    "complete-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -210,7 +210,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 		bundles := mapPackagesToBundles(deployedPackages)
 
 		require.Equal(t, 1, len(bundles))
-		require.Equal(t, "complete-bundle", bundles[0].Name)
+		require.Equal(t, "complete-Bundle", bundles[0].Name)
 		require.Equal(t, 1, len(bundles[0].Packages))
 	})
 
@@ -241,7 +241,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 		require.Equal(t, 0, len(bundles))
 	})
 
-	t.Run("sorts packages within each bundle", func(t *testing.T) {
+	t.Run("sorts packages within each Bundle", func(t *testing.T) {
 		deployedPackages := []state.DeployedPackage{
 			{
 				Name: "zebra",
@@ -250,7 +250,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "zebra",
 						Version: "1.0.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "sorted-bundle",
+							AnnotationBundleName:    "sorted-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -263,7 +263,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "alpha",
 						Version: "1.0.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "sorted-bundle",
+							AnnotationBundleName:    "sorted-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -276,7 +276,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "beta",
 						Version: "1.0.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "sorted-bundle",
+							AnnotationBundleName:    "sorted-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -296,7 +296,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 
 	t.Run("complex scenario with multiple bundles and versions", func(t *testing.T) {
 		deployedPackages := []state.DeployedPackage{
-			// init package without bundle annotations
+			// init package without Bundle annotations
 			{
 				Name: "init",
 				Data: v1alpha1.ZarfPackage{
@@ -306,7 +306,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 					},
 				},
 			},
-			// demo-bundle v1.0.0
+			// demo-Bundle v1.0.0
 			{
 				Name: "podinfo",
 				Data: v1alpha1.ZarfPackage{
@@ -314,7 +314,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "podinfo",
 						Version: "6.4.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "demo-bundle",
+							AnnotationBundleName:    "demo-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -327,13 +327,13 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "prometheus",
 						Version: "2.45.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "demo-bundle",
+							AnnotationBundleName:    "demo-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
 				},
 			},
-			// demo-bundle v2.0.0
+			// demo-Bundle v2.0.0
 			{
 				Name: "podinfo",
 				Data: v1alpha1.ZarfPackage{
@@ -341,13 +341,13 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "podinfo",
 						Version: "6.5.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "demo-bundle",
+							AnnotationBundleName:    "demo-Bundle",
 							AnnotationBundleVersion: "2.0.0",
 						},
 					},
 				},
 			},
-			// web-bundle
+			// web-Bundle
 			{
 				Name: "nginx",
 				Data: v1alpha1.ZarfPackage{
@@ -355,7 +355,7 @@ func TestMapPackagesToBundles(t *testing.T) {
 						Name:    "nginx",
 						Version: "1.25.0",
 						Annotations: map[string]string{
-							AnnotationBundleName:    "web-bundle",
+							AnnotationBundleName:    "web-Bundle",
 							AnnotationBundleVersion: "1.0.0",
 						},
 					},
@@ -367,33 +367,33 @@ func TestMapPackagesToBundles(t *testing.T) {
 
 		require.Equal(t, 3, len(bundles))
 
-		// Verify sorting: demo-bundle 1.0.0, demo-bundle 2.0.0, web-bundle 1.0.0
-		require.Equal(t, "demo-bundle", bundles[0].Name)
+		// Verify sorting: demo-Bundle 1.0.0, demo-Bundle 2.0.0, web-Bundle 1.0.0
+		require.Equal(t, "demo-Bundle", bundles[0].Name)
 		require.Equal(t, "1.0.0", bundles[0].Version)
 		require.Equal(t, 2, len(bundles[0].Packages))
 
-		require.Equal(t, "demo-bundle", bundles[1].Name)
+		require.Equal(t, "demo-Bundle", bundles[1].Name)
 		require.Equal(t, "2.0.0", bundles[1].Version)
 		require.Equal(t, 1, len(bundles[1].Packages))
 
-		require.Equal(t, "web-bundle", bundles[2].Name)
+		require.Equal(t, "web-Bundle", bundles[2].Name)
 		require.Equal(t, "1.0.0", bundles[2].Version)
 		require.Equal(t, 1, len(bundles[2].Packages))
 	})
 }
 
 func TestPrintBundleList(t *testing.T) {
-	t.Run("handles empty bundle list", func(t *testing.T) {
+	t.Run("handles empty Bundle list", func(t *testing.T) {
 		// This test just ensures the function doesn't panic with empty input
 		bundles := []BundleDeployment{}
 		// Should output a warning message, but not panic
 		PrintBundleList(bundles)
 	})
 
-	t.Run("handles bundle list with data", func(t *testing.T) {
+	t.Run("handles Bundle list with data", func(t *testing.T) {
 		bundles := []BundleDeployment{
 			{
-				Name:     "test-bundle",
+				Name:     "test-Bundle",
 				Version:  "1.0.0",
 				Packages: []string{"pkg1:1.0.0", "pkg2:2.0.0"},
 			},

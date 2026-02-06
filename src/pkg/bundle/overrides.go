@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -174,7 +174,7 @@ func (b *Bundle) processOverrideValues(overrideOpts *values.Options, values []ty
 	return nil
 }
 
-// processOverrideVariables processes bundle variables overrides and adds them to the override map
+// processOverrideVariables processes Bundle variables overrides and adds them to the override map
 func (b *Bundle) processOverrideVariables(overrideOpts *values.Options, variables []types.BundleChartVariable, overrideData map[string]overrideData) error {
 	for i := range variables {
 		v := &variables[i]
@@ -185,7 +185,7 @@ func (b *Bundle) processOverrideVariables(overrideOpts *values.Options, variable
 		overrideVal = overrideData[v.Name].value
 		v.Source = overrideData[v.Name].source
 
-		// if not found in overrideData, check for bundle default value, else was not set
+		// if not found in overrideData, check for Bundle default value, else was not set
 		if overrideVal == nil {
 			if v.Default != nil {
 				overrideVal = v.Default

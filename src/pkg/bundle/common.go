@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -31,8 +31,8 @@ import (
 type Bundle struct {
 	// cfg is the Bundle's configuration options
 	cfg *types.BundleConfig
-	// bundle is the bundle's metadata read into memory
-	bundle types.UDSBundle
+	// Bundle is the Bundle's metadata read into memory
+	Bundle types.UDSBundle
 	// tmp is the temporary directory used by the Bundle cleaned up with ClearPaths()
 	tmp string
 }
@@ -69,9 +69,9 @@ func (b *Bundle) ClearPaths() {
 	_ = os.RemoveAll(b.tmp)
 }
 
-// ValidateBundleResources validates the bundle's metadata and package references
+// ValidateBundleResources validates the Bundle's metadata and package references
 func (b *Bundle) ValidateBundleResources(spinner *message.Spinner) error {
-	bundle := &b.bundle
+	bundle := &b.Bundle
 	if bundle.Metadata.Architecture == "" {
 		// ValidateBundle was erroneously called before CalculateBuildInfo
 		if err := b.CalculateBuildInfo(); err != nil {
@@ -93,7 +93,7 @@ func (b *Bundle) ValidateBundleResources(spinner *message.Spinner) error {
 	}
 
 	if err := validateBundleVars(bundle.Packages); err != nil {
-		return fmt.Errorf("error validating bundle vars: %s", err)
+		return fmt.Errorf("error validating Bundle vars: %s", err)
 	}
 
 	// validate access to packages as well as components referenced in the package
@@ -139,11 +139,11 @@ func (b *Bundle) ValidateBundleResources(spinner *message.Spinner) error {
 				if err != nil {
 					return err
 				}
-				// todo: don't do this here, a "validate" fn shouldn't be modifying the bundle
+				// todo: don't do this here, a "validate" fn shouldn't be modifying the Bundle
 				bundle.Packages[idx].Ref = pkg.Ref + "@sha256:" + manifestDesc.Digest.Encoded()
 			}
 		} else {
-			// atm we don't support outputting a bundle with local pkgs outputting to OCI
+			// atm we don't support outputting a Bundle with local pkgs outputting to OCI
 			if utils.IsRegistryURL(b.cfg.CreateOpts.Output) {
 				return fmt.Errorf("detected local Zarf package: %s, outputting to an OCI registry is not supported when using local Zarf packages", pkg.Name)
 			}
@@ -161,7 +161,7 @@ func (b *Bundle) ValidateBundleResources(spinner *message.Spinner) error {
 		if err != nil {
 			return err
 		}
-		// For local pkgs, this will throw an error if the zarf package name in the bundle doesn't match the actual zarf package name
+		// For local pkgs, this will throw an error if the zarf package name in the Bundle doesn't match the actual zarf package name
 		zarfYAML, err = f.GetPkgMetadata()
 		if err != nil {
 			return err
@@ -173,7 +173,7 @@ func (b *Bundle) ValidateBundleResources(spinner *message.Spinner) error {
 		}
 		message.Debug("Validating package:", jsonValue)
 
-		// todo: need to packager.ValidatePackageSignature (or come up with a bundle-level signature scheme)
+		// todo: need to packager.ValidatePackageSignature (or come up with a Bundle-level signature scheme)
 		publicKeyPath := filepath.Join(b.tmp, config.PublicKeyFile)
 		if pkg.PublicKey != "" {
 			if err := os.WriteFile(publicKeyPath, []byte(pkg.PublicKey), helpers.ReadWriteUser); err != nil {
@@ -183,7 +183,7 @@ func (b *Bundle) ValidateBundleResources(spinner *message.Spinner) error {
 		}
 
 		if len(pkg.OptionalComponents) > 0 {
-			// validate the optional components exist in the package and support the bundle's target architecture
+			// validate the optional components exist in the package and support the Bundle's target architecture
 			for _, component := range pkg.OptionalComponents {
 				c := helpers.Find(zarfYAML.Components, func(c v1alpha1.ZarfComponent) bool {
 					return c.Name == component
@@ -192,7 +192,7 @@ func (b *Bundle) ValidateBundleResources(spinner *message.Spinner) error {
 				if c.Name == "" {
 					return fmt.Errorf("%s .packages[%s].components[%s] does not exist in upstream: %s", config.BundleYAML, pkg.Repository, component, url)
 				}
-				// make sure the component supports the bundle's target architecture
+				// make sure the component supports the Bundle's target architecture
 				if c.Only.Cluster.Architecture != "" && c.Only.Cluster.Architecture != bundle.Metadata.Architecture {
 					return fmt.Errorf("%s .packages[%s].components[%s] does not support architecture: %s", config.BundleYAML, pkg.Repository, component, bundle.Metadata.Architecture)
 				}
@@ -207,29 +207,29 @@ func (b *Bundle) ValidateBundleResources(spinner *message.Spinner) error {
 	return nil
 }
 
-// CalculateBuildInfo calculates the build info for the bundle
+// CalculateBuildInfo calculates the build info for the Bundle
 func (b *Bundle) CalculateBuildInfo() error {
 	now := time.Now()
-	b.bundle.Build.User = os.Getenv("USER")
+	b.Bundle.Build.User = os.Getenv("USER")
 
 	hostname, err := os.Hostname()
 	if err != nil {
 		return err
 	}
-	b.bundle.Build.Terminal = hostname
+	b.Bundle.Build.Terminal = hostname
 
 	// --architecture flag > metadata.arch > build.arch > runtime.GOARCH (default)
-	b.bundle.Build.Architecture = config.GetArch(b.bundle.Metadata.Architecture, b.bundle.Build.Architecture)
-	b.bundle.Metadata.Architecture = b.bundle.Build.Architecture
+	b.Bundle.Build.Architecture = config.GetArch(b.Bundle.Metadata.Architecture, b.Bundle.Build.Architecture)
+	b.Bundle.Metadata.Architecture = b.Bundle.Build.Architecture
 
-	b.bundle.Build.Timestamp = now.Format(time.RFC1123Z)
+	b.Bundle.Build.Timestamp = now.Format(time.RFC1123Z)
 
-	b.bundle.Build.Version = config.CLIVersion
+	b.Bundle.Build.Version = config.CLIVersion
 
 	return nil
 }
 
-// ValidateBundleSignature validates the bundle signature
+// ValidateBundleSignature validates the Bundle signature
 func ValidateBundleSignature(bundleYAMLPath, signaturePath, publicKeyPath string) error {
 	if helpers.InvalidPath(bundleYAMLPath) {
 		if bundleYAMLPath == "" {
@@ -294,7 +294,7 @@ func validateBundleVars(packages []types.Package) error {
 	exports := make(map[string]string)
 	for i, pkg := range packages {
 		if i == 0 && pkg.Imports != nil {
-			return errors.New("first package in bundle cannot have imports")
+			return errors.New("first package in Bundle cannot have imports")
 		}
 		// capture exported vars from all Zarf pkgs
 		if pkg.Exports != nil {

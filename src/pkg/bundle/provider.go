@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -21,7 +21,7 @@ import (
 //
 // operations that are common no matter the source should be implemented on bundler
 type Provider interface {
-	// LoadBundleMetadata loads a bundle's metadata and signature into the temporary directory and returns a map of the bundle's metadata files
+	// LoadBundleMetadata loads a Bundle's metadata and signature into the temporary directory and returns a map of the Bundle's metadata files
 	//
 	// these two files are placed in the `dst` directory
 	//
@@ -32,18 +32,18 @@ type Provider interface {
 	// : : pulls the metadata from the OCI ref
 	LoadBundleMetadata() (types.PathMap, error)
 
-	// LoadBundle loads a bundle into the temporary directory and returns a map of the bundle's files
+	// LoadBundle loads a Bundle into the temporary directory and returns a map of the Bundle's files
 	//
 	// (currently only the remote provider utilizes the concurrency parameter)
 	LoadBundle(options types.BundlePullOptions, concurrency int) (*types.UDSBundle, types.PathMap, error)
 
-	// CreateBundleSBOM creates a bundle-level SBOM from the underlying Zarf packages, if the Zarf package contains an SBOM
+	// CreateBundleSBOM creates a Bundle-level SBOM from the underlying Zarf packages, if the Zarf package contains an SBOM
 	CreateBundleSBOM(extractSBOM bool, bundleName string) ([]string, error)
 
-	// PublishBundle publishes a bundle to a remote OCI repo
+	// PublishBundle publishes a Bundle to a remote OCI repo
 	PublishBundle(bundle types.UDSBundle, remote *oci.OrasRemote) error
 
-	// getBundleManifest gets the bundle's root manifest
+	// getBundleManifest gets the Bundle's root manifest
 	getBundleManifest() (*oci.Manifest, error)
 }
 

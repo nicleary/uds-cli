@@ -15,12 +15,12 @@ import (
 )
 
 const (
-	// Annotation keys for bundle metadata (following OCI image spec)
-	AnnotationBundleName    = "dev.uds.bundle.name"
-	AnnotationBundleVersion = "dev.uds.bundle.version"
+	// Annotation keys for Bundle metadata (following OCI image spec)
+	AnnotationBundleName    = "dev.uds.Bundle.name"
+	AnnotationBundleVersion = "dev.uds.Bundle.version"
 )
 
-// BundleDeployment represents a deployed bundle with its packages
+// BundleDeployment represents a deployed Bundle with its packages
 type BundleDeployment struct {
 	Name     string
 	Version  string
@@ -50,7 +50,7 @@ func mapPackagesToBundles(deployedPackages []state.DeployedPackage) []BundleDepl
 	bundleMap := make(map[string]*BundleDeployment)
 
 	for _, pkg := range deployedPackages {
-		// Check if package has bundle annotations
+		// Check if package has Bundle annotations
 		annotations := pkg.Data.Metadata.Annotations
 		if annotations == nil {
 			continue
@@ -59,7 +59,7 @@ func mapPackagesToBundles(deployedPackages []state.DeployedPackage) []BundleDepl
 		bundleName, hasBundleName := annotations[AnnotationBundleName]
 		bundleVersion, hasBundleVersion := annotations[AnnotationBundleVersion]
 
-		// Only include packages that have both bundle name and version annotations
+		// Only include packages that have both Bundle name and version annotations
 		if !hasBundleName || !hasBundleVersion {
 			continue
 		}
@@ -81,7 +81,7 @@ func mapPackagesToBundles(deployedPackages []state.DeployedPackage) []BundleDepl
 	// Convert map to sorted slice
 	bundles := make([]BundleDeployment, 0, len(bundleMap))
 	for _, bundle := range bundleMap {
-		// Sort packages within each bundle
+		// Sort packages within each Bundle
 		sort.Strings(bundle.Packages)
 		bundles = append(bundles, *bundle)
 	}

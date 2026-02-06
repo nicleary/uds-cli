@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -294,14 +294,14 @@ func TestFileVariableHandlers(t *testing.T) {
 				nil,
 				nil,
 				"",
-				fmt.Sprintf("%s/uds-bundle-helm-overrides-amd64-0.0.1.tar.zst", relativePath),
+				fmt.Sprintf("%s/uds-Bundle-helm-overrides-amd64-0.0.1.tar.zst", relativePath),
 			),
 			bundleVars: &[]types.BundleChartVariable{
 				{
 					Name:        varName,
 					Path:        path,
 					Type:        chartvariable.File,
-					Description: "set the var from bundle default, so source path is bundle directory",
+					Description: "set the var from Bundle default, so source path is Bundle directory",
 					Default:     "test.cert",
 				},
 			},
@@ -315,14 +315,14 @@ func TestFileVariableHandlers(t *testing.T) {
 				nil,
 				nil,
 				"",
-				fmt.Sprintf("%s/uds-bundle-helm-overrides-amd64-0.0.1.tar.zst", relativePath),
+				fmt.Sprintf("%s/uds-Bundle-helm-overrides-amd64-0.0.1.tar.zst", relativePath),
 			),
 			bundleVars: &[]types.BundleChartVariable{
 				{
 					Name:        varName,
 					Path:        path,
 					Type:        chartvariable.File,
-					Description: "set the var from bundle default, so source path is bundle directory",
+					Description: "set the var from Bundle default, so source path is Bundle directory",
 					Default:     "not-there-test.cert",
 				},
 			},
@@ -394,15 +394,15 @@ func TestFormPkgViews(t *testing.T) {
 			expectedVal: "set-by-config",
 		},
 		{
-			name:   "complex path, set by bundle",
+			name:   "complex path, set by Bundle",
 			Bundle: newTestBundle(nil, nil, nil, "", ""),
 			bundleVars: types.BundleChartVariable{
 				Name:    "VAR1",
 				Path:    "a.complex.path",
-				Default: "set-by-bundle",
+				Default: "set-by-Bundle",
 			},
 			expectedKey: "VAR1",
-			expectedVal: "set-by-bundle",
+			expectedVal: "set-by-Bundle",
 		},
 		{
 			name:        "mask env var",
@@ -470,7 +470,7 @@ func TestFormPkgViews(t *testing.T) {
 						},
 					},
 				},
-				bundle: types.UDSBundle{
+				Bundle: types.UDSBundle{
 					Packages: []types.Package{
 						{
 							Name: pkgName,
@@ -509,7 +509,7 @@ func TestFormPkgViews(t *testing.T) {
 			}
 
 			if tc.bundleVars.Name != "" {
-				tc.Bundle.bundle = types.UDSBundle{Packages: []types.Package{newTestPkg(pkgName, componentName, chartName, tc.bundleVars)}}
+				tc.Bundle.Bundle = types.UDSBundle{Packages: []types.Package{newTestPkg(pkgName, componentName, chartName, tc.bundleVars)}}
 			}
 
 			pkgViews := formPkgViews(&tc.Bundle)
@@ -655,7 +655,7 @@ func TestFormPkgViews(t *testing.T) {
 				defer os.Unsetenv(zarfVarTest.envKey)
 			}
 
-			zarfVarTest.Bundle.bundle = types.UDSBundle{Packages: []types.Package{{Name: pkgName}}}
+			zarfVarTest.Bundle.Bundle = types.UDSBundle{Packages: []types.Package{{Name: pkgName}}}
 			pkgViews := formPkgViews(&zarfVarTest.Bundle)
 			actualView := pkgViews[0].overrides["overrides"].(anyArr)[0]
 			require.Contains(t, actualView.(map[string]interface{})[zarfVarTest.expectedKey], zarfVarTest.expectedVal)
@@ -676,7 +676,7 @@ func TestFormPkgViews(t *testing.T) {
 
 	for _, tc := range nilCheckTests {
 		t.Run(tc.name, func(t *testing.T) {
-			tc.Bundle.bundle = types.UDSBundle{Packages: []types.Package{newTestPkg(pkgName, componentName, chartName, tc.bundleVars)}}
+			tc.Bundle.Bundle = types.UDSBundle{Packages: []types.Package{newTestPkg(pkgName, componentName, chartName, tc.bundleVars)}}
 
 			pkgViews := formPkgViews(&tc.Bundle)
 			v := pkgViews[0].overrides["overrides"]

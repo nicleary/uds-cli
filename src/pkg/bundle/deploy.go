@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -37,15 +37,15 @@ const hiddenVar = "****"
 
 type NamespaceOverrideMap = map[string]map[string]string
 
-// Deploy deploys a bundle
+// Deploy deploys a Bundle
 func (b *Bundle) Deploy(ctx context.Context) error {
-	packagesToDeploy := b.bundle.Packages
+	packagesToDeploy := b.Bundle.Packages
 
 	// Check if --packages flag is set and zarf packages have been specified
 	if len(b.cfg.DeployOpts.Packages) != 0 {
 		userSpecifiedPackages := strings.Split(strings.ReplaceAll(b.cfg.DeployOpts.Packages[0], " ", ""), ",")
 		var selectedPackages []types.Package
-		for _, pkg := range b.bundle.Packages {
+		for _, pkg := range b.Bundle.Packages {
 			if slices.Contains(userSpecifiedPackages, pkg.Name) {
 				selectedPackages = append(selectedPackages, pkg)
 			}
@@ -86,7 +86,7 @@ func deployPackages(ctx context.Context, packagesToDeploy []types.Package, b *Bu
 			if err != nil {
 				return err
 			}
-			b.bundle.Packages[i] = pkg
+			b.Bundle.Packages[i] = pkg
 		}
 		pkgTmp, err := zarfUtils.MakeTempDir(config.CommonOptions.TempDirectory)
 		if err != nil {
@@ -147,11 +147,11 @@ func deployPackages(ctx context.Context, packagesToDeploy []types.Package, b *Bu
 			IsInteractive:          !config.CommonOptions.Confirm,
 		}
 
-		// Merge package annotations with bundle annotations; bundle annotations take precedence
+		// Merge package annotations with Bundle annotations; Bundle annotations take precedence
 		bundleAnnotations := make(map[string]string)
 		maps.Copy(bundleAnnotations, pkgLayout.Pkg.Metadata.Annotations)
-		bundleAnnotations[AnnotationBundleName] = b.bundle.Metadata.Name
-		bundleAnnotations[AnnotationBundleVersion] = b.bundle.Metadata.Version
+		bundleAnnotations[AnnotationBundleName] = b.Bundle.Metadata.Name
+		bundleAnnotations[AnnotationBundleVersion] = b.Bundle.Metadata.Version
 
 		// Set the merged annotations back on the package
 		pkgLayout.Pkg.Metadata.Annotations = bundleAnnotations
@@ -307,7 +307,7 @@ func newStorageClass(pkgVars zarfVarData, zarfPkgKind v1alpha1.ZarfPackageKind) 
 	return storageClass
 }
 
-// PreDeployValidation validates the bundle before deployment
+// PreDeployValidation validates the Bundle before deployment
 func (b *Bundle) PreDeployValidation() (string, string, string, error) {
 	// Check that provided oci source path is valid, and update it if it's missing the full path
 	source, err := CheckOCISourcePath(b.cfg.DeployOpts.Source)
@@ -322,7 +322,7 @@ func (b *Bundle) PreDeployValidation() (string, string, string, error) {
 		return "", "", "", err
 	}
 
-	// pull the bundle's metadata + sig
+	// pull the Bundle's metadata + sig
 	filepaths, err := provider.LoadBundleMetadata()
 	if err != nil {
 		return "", "", "", err
@@ -340,42 +340,42 @@ func (b *Bundle) PreDeployValidation() (string, string, string, error) {
 		return "", "", "", err
 	}
 
-	// todo: we also read the SHAs from the uds-bundle.yaml here, should we refactor so that we use the bundle's root manifest?
-	if err := goyaml.Unmarshal(bundleYAML, &b.bundle); err != nil {
+	// todo: we also read the SHAs from the uds-Bundle.yaml here, should we refactor so that we use the Bundle's root manifest?
+	if err := goyaml.Unmarshal(bundleYAML, &b.Bundle); err != nil {
 		return "", "", "", err
 	}
 
-	// validate bundle's arch against cluster
-	err = ValidateArch(config.GetArch(b.bundle.Build.Architecture))
+	// validate Bundle's arch against cluster
+	err = ValidateArch(config.GetArch(b.Bundle.Build.Architecture))
 	if err != nil {
 		return "", "", "", err
 	}
 
-	bundleName := b.bundle.Metadata.Name
+	bundleName := b.Bundle.Metadata.Name
 	return bundleName, string(bundleYAML), source, err
 }
 
-// ConfirmBundleDeploy prompts the user to confirm bundle creation
+// ConfirmBundleDeploy prompts the user to confirm Bundle creation
 func (b *Bundle) ConfirmBundleDeploy() (confirm bool) {
 	pkgviews := formPkgViews(b)
 
 	message.HeaderInfof("🎁 BUNDLE DEFINITION")
 
-	message.Title("Metadata:", "information about this bundle")
-	if err := zarfUtils.ColorPrintYAML(b.bundle.Metadata, nil, false); err != nil {
-		message.WarnErr(err, "unable to print bundle metadata yaml")
+	message.Title("Metadata:", "information about this Bundle")
+	if err := zarfUtils.ColorPrintYAML(b.Bundle.Metadata, nil, false); err != nil {
+		message.WarnErr(err, "unable to print Bundle metadata yaml")
 	}
 
 	message.HorizontalRule()
 
-	message.Title("Build:", "info about the machine, UDS version, and the user that created this bundle")
-	if err := zarfUtils.ColorPrintYAML(b.bundle.Build, nil, false); err != nil {
-		message.WarnErr(err, "unable to print bundle build yaml")
+	message.Title("Build:", "info about the machine, UDS version, and the user that created this Bundle")
+	if err := zarfUtils.ColorPrintYAML(b.Bundle.Build, nil, false); err != nil {
+		message.WarnErr(err, "unable to print Bundle build yaml")
 	}
 
 	message.HorizontalRule()
 
-	message.Title("Packages:", "definition of packages this bundle deploys, including variable overrides")
+	message.Title("Packages:", "definition of packages this Bundle deploys, including variable overrides")
 
 	for _, pkg := range pkgviews {
 		if err := zarfUtils.ColorPrintYAML(pkg.meta, nil, false); err != nil {
@@ -394,7 +394,7 @@ func (b *Bundle) ConfirmBundleDeploy() (confirm bool) {
 	}
 
 	prompt := &survey.Confirm{
-		Message: "Deploy this bundle?",
+		Message: "Deploy this Bundle?",
 	}
 
 	if err := survey.AskOne(prompt, &confirm); err != nil || !confirm {
@@ -411,7 +411,7 @@ type PkgView struct {
 // formPkgViews creates a unique pre deploy view of each package's set overrides and Zarf variables
 func formPkgViews(b *Bundle) []PkgView {
 	var pkgViews []PkgView
-	for _, pkg := range b.bundle.Packages {
+	for _, pkg := range b.Bundle.Packages {
 		variables := make([]interface{}, 0)
 
 		// process variables and overrides to get values
@@ -420,7 +420,7 @@ func formPkgViews(b *Bundle) []PkgView {
 
 		for compName, component := range pkg.Overrides {
 			for chartName, chart := range component {
-				// filter out bundle overrides so we're left with Zarf Variables
+				// filter out Bundle overrides so we're left with Zarf Variables
 				removeOverrides(variableData, chart.Variables)
 
 				helmChartVars := valuesOverrides[compName][chartName]
@@ -520,10 +520,10 @@ func extractValues(helmChartVars map[string]interface{}, variables []types.Bundl
 	return viewVars
 }
 
-// removeOverrides mutates pkgVars by removing bundle overrride variables, leaving only Zarf variables
+// removeOverrides mutates pkgVars by removing Bundle overrride variables, leaving only Zarf variables
 func removeOverrides(pkgVars map[string]overrideData, chartVars []types.BundleChartVariable) {
 	for _, cv := range chartVars {
-		// remove the bundle override variable if exists in pkgVars
+		// remove the Bundle override variable if exists in pkgVars
 		_, exists := pkgVars[strings.ToUpper(cv.Name)]
 		if exists {
 			delete(pkgVars, strings.ToUpper(cv.Name))

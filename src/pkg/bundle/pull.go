@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -22,12 +22,12 @@ import (
 	"github.com/zarf-dev/zarf/src/pkg/zoci"
 )
 
-// Pull pulls a bundle and saves it locally
+// Pull pulls a Bundle and saves it locally
 func (b *Bundle) Pull() error {
 	ctx := context.TODO()
 	tmpDstDir, err := zarfUtils.MakeTempDir(config.CommonOptions.TempDirectory)
 	if err != nil {
-		return fmt.Errorf("pull bundle unable to create temp directory: %w", err)
+		return fmt.Errorf("pull Bundle unable to create temp directory: %w", err)
 	}
 
 	// Get validated source path
@@ -42,12 +42,12 @@ func (b *Bundle) Pull() error {
 		return err
 	}
 
-	// pull the bundle's uds-bundle.yaml and it's Zarf pkgs
+	// pull the Bundle's uds-Bundle.yaml and it's Zarf pkgs
 	bundle, filepaths, err := provider.LoadBundle(b.cfg.PullOpts, config.CommonOptions.OCIConcurrency)
 	if err != nil {
 		return err
 	}
-	b.bundle = *bundle
+	b.Bundle = *bundle
 
 	// create a remote client just to resolve the root descriptor
 	platform := ocispec.Platform{
@@ -59,16 +59,16 @@ func (b *Bundle) Pull() error {
 		return err
 	}
 
-	// fetch the bundle's root descriptor
+	// fetch the Bundle's root descriptor
 	rootDesc, err := remote.ResolveRoot(ctx)
 	if err != nil {
 		return err
 	}
 
-	// make an index.json for this bundle and write to tmp
+	// make an index.json for this Bundle and write to tmp
 	index := ocispec.Index{}
 	index.SchemaVersion = 2
-	ref := b.bundle.Metadata.Version
+	ref := b.Bundle.Metadata.Version
 	annotations := map[string]string{
 		ocispec.AnnotationRefName: ref,
 	}
@@ -83,8 +83,8 @@ func (b *Bundle) Pull() error {
 		return err
 	}
 
-	// tarball the bundle
-	filename := fmt.Sprintf("%s%s-%s-%s.tar.zst", config.BundlePrefix, b.bundle.Metadata.Name, b.bundle.Metadata.Architecture, b.bundle.Metadata.Version)
+	// tarball the Bundle
+	filename := fmt.Sprintf("%s%s-%s-%s.tar.zst", config.BundlePrefix, b.Bundle.Metadata.Name, b.Bundle.Metadata.Architecture, b.Bundle.Metadata.Version)
 	dst := filepath.Join(b.cfg.PullOpts.OutputDirectory, filename)
 
 	_ = os.RemoveAll(dst)
@@ -114,7 +114,7 @@ func (b *Bundle) Pull() error {
 		return err
 	}
 
-	// tarball the bundle
+	// tarball the Bundle
 	if err := config.BundleArchiveFormat.Archive(ctx, out, files); err != nil {
 		return err
 	}

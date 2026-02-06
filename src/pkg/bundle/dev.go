@@ -1,7 +1,7 @@
 // Copyright 2024 Defense Unicorns
 // SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
-// Package bundle contains functions for interacting with, managing and deploying UDS packages
+// Package Bundle contains functions for interacting with, managing and deploying UDS packages
 package bundle
 
 import (
@@ -22,12 +22,12 @@ import (
 func (b *Bundle) CreateZarfPkgs() error {
 	srcDir := b.cfg.CreateOpts.SourceDirectory
 	bundleYAMLPath := filepath.Join(srcDir, b.cfg.CreateOpts.BundleFile)
-	if err := utils.ReadYAMLStrict(bundleYAMLPath, &b.bundle); err != nil {
+	if err := utils.ReadYAMLStrict(bundleYAMLPath, &b.Bundle); err != nil {
 		return fmt.Errorf("failed to read %s, error in YAML: %s", b.cfg.CreateOpts.BundleFile, err.Error())
 	}
 
 	zarfPackagePattern := `^zarf-.*\.tar\.zst$`
-	for _, pkg := range b.bundle.Packages {
+	for _, pkg := range b.Bundle.Packages {
 		pkg = b.setPackageFlavor(pkg)
 		// Can only set flavors for local packages
 		if pkg.Path == "" {
@@ -40,7 +40,7 @@ func (b *Bundle) CreateZarfPkgs() error {
 
 		// if pkg is a local zarf package, attempt to create it if it doesn't exist
 		if pkg.Path != "" {
-			path, err := utils.GetPkgPath(pkg, config.GetArch(b.bundle.Metadata.Architecture), srcDir)
+			path, err := utils.GetPkgPath(pkg, config.GetArch(b.Bundle.Metadata.Architecture), srcDir)
 			if err != nil {
 				return err
 			}
@@ -85,8 +85,8 @@ func (b *Bundle) setPackageFlavor(pkg types.Package) types.Package {
 	return pkg
 }
 
-// SetDeploySource sets the source for the bundle when in dev mode
+// SetDeploySource sets the source for the Bundle when in dev mode
 func (b *Bundle) SetDeploySource(srcDir string) {
-	filename := fmt.Sprintf("%s%s-%s-%s.tar.zst", config.BundlePrefix, b.bundle.Metadata.Name, b.bundle.Metadata.Architecture, b.bundle.Metadata.Version)
+	filename := fmt.Sprintf("%s%s-%s-%s.tar.zst", config.BundlePrefix, b.Bundle.Metadata.Name, b.Bundle.Metadata.Architecture, b.Bundle.Metadata.Version)
 	b.cfg.DeployOpts.Source = filepath.Join(srcDir, filename)
 }
