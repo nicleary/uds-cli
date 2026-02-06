@@ -18,7 +18,7 @@ import (
 	"time"
 
 	"github.com/defenseunicorns/pkg/helpers/v2"
-	"github.com/defenseunicorns/uds-cli/src/pkg/message"
+	"github.com/nicleary/uds-cli/src/pkg/message"
 	"github.com/stretchr/testify/require"
 	"github.com/zarf-dev/zarf/src/pkg/utils/exec"
 )

@@ -5,8 +5,8 @@
 package types
 
 import (
-	"github.com/defenseunicorns/uds-cli/src/types/chartvariable"
-	"github.com/defenseunicorns/uds-cli/src/types/valuesources"
+	"github.com/nicleary/uds-cli/src/types/chartvariable"
+	"github.com/nicleary/uds-cli/src/types/valuesources"
 )
 
 // UDSBundle is the top-level structure of a UDS bundle

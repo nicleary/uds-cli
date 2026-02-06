@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/defenseunicorns/uds-cli/src/pkg/engine/k8s"
-	"github.com/defenseunicorns/uds-cli/src/pkg/message"
+	"github.com/nicleary/uds-cli/src/pkg/engine/k8s"
+	"github.com/nicleary/uds-cli/src/pkg/message"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"

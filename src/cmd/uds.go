@@ -12,13 +12,13 @@ import (
 	"path/filepath"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/defenseunicorns/uds-cli/src/config"
-	"github.com/defenseunicorns/uds-cli/src/config/lang"
-	"github.com/defenseunicorns/uds-cli/src/pkg/bundle"
-	"github.com/defenseunicorns/uds-cli/src/pkg/utils"
+	"github.com/nicleary/uds-cli/src/config"
+	"github.com/nicleary/uds-cli/src/config/lang"
+	"github.com/nicleary/uds-cli/src/pkg/bundle"
+	"github.com/nicleary/uds-cli/src/pkg/utils"
 	"github.com/spf13/cobra"
 
-	"github.com/defenseunicorns/uds-cli/src/pkg/message"
+	"github.com/nicleary/uds-cli/src/pkg/message"
 	"github.com/zarf-dev/zarf/src/pkg/logger"
 )
 

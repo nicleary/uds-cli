@@ -7,7 +7,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/defenseunicorns/uds-cli/src/config/lang"
+	"github.com/nicleary/uds-cli/src/config/lang"
 	"github.com/spf13/cobra"
 )
 

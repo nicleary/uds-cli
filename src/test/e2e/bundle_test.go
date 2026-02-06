@@ -19,7 +19,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"oras.land/oras-go/v2/registry"
 
-	"github.com/defenseunicorns/uds-cli/src/config"
+	"github.com/nicleary/uds-cli/src/config"
 )
 
 func TestUDSCmd(t *testing.T) {
@@ -321,7 +321,7 @@ func TestInspectBundleSignedWithKeyScenarios(t *testing.T) {
 }
 
 func TestSimplePackagesWithSBOMs(t *testing.T) {
-	// tests that this bug is resolved: https://github.com/defenseunicorns/uds-cli/issues/923
+	// tests that this bug is resolved: https://github.com/nicleary/uds-cli/issues/923
 	e2e.CreateZarfPkg(t, "src/test/packages/no-cluster/output-var", false)
 	e2e.CreateZarfPkg(t, "src/test/packages/no-cluster/real-simple", false)
 

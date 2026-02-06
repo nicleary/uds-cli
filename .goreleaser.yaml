@@ -19,7 +19,7 @@ builds:
       - darwin
     ldflags:
       - -s -w
-      - -X 'github.com/defenseunicorns/uds-cli/src/config.CLIVersion={{.Tag}}'
+      - -X 'github.com/nicleary/uds-cli/src/config.CLIVersion={{.Tag}}'
       - -X 'github.com/zarf-dev/zarf/src/config.ActionsCommandZarfPrefix=zarf'
       - -X 'k8s.io/component-base/version.gitVersion=v{{.Env.K8S_MODULES_MAJOR_VER}}.{{.Env.K8S_MODULES_MINOR_VER}}.{{.Env.K8S_MODULES_PATCH_VER}}'
       - -X 'k8s.io/component-base/version.gitCommit={{.FullCommit}}'
@@ -75,7 +75,7 @@ brews:
           owner: defenseunicorns
           name: homebrew-tap
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
-    homepage: "https://github.com/defenseunicorns/uds-cli"
+    homepage: "https://github.com/nicleary/uds-cli"
     description: "CLI for Unicorn Delivery Service"
 
   # NOTE: We are using .Version instead of .Tag because homebrew has weird semver parsing rules and won't be able to
@@ -93,7 +93,7 @@ brews:
           owner: defenseunicorns
           name: homebrew-tap
     commit_msg_template: "Brew formula update for {{ .ProjectName }} versioned release {{ .Tag }}"
-    homepage: "https://github.com/defenseunicorns/uds-cli"
+    homepage: "https://github.com/nicleary/uds-cli"
     description: "CLI for Unicorn Delivery Service"
 
 # Generate a GitHub release and publish the release for the tag

@@ -1,16 +1,16 @@
 # UDS-CLI
 
-[![Latest Release](https://img.shields.io/github/v/release/defenseunicorns/uds-cli)](https://github.com/defenseunicorns/uds-cli/releases)
+[![Latest Release](https://img.shields.io/github/v/release/defenseunicorns/uds-cli)](https://github.com/nicleary/uds-cli/releases)
 [![Go version](https://img.shields.io/github/go-mod/go-version/defenseunicorns/uds-cli?filename=go.mod)](https://go.dev/)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/defenseunicorns/uds-cli/release.yaml)](https://github.com/defenseunicorns/uds-cli/actions/workflows/release.yaml)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/defenseunicorns/uds-cli/badge)](https://api.securityscorecards.dev/projects/github.com/defenseunicorns/uds-cli)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/defenseunicorns/uds-cli/release.yaml)](https://github.com/nicleary/uds-cli/actions/workflows/release.yaml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/nicleary/uds-cli/badge)](https://api.securityscorecards.dev/projects/github.com/nicleary/uds-cli)
 
 ## Install
 Recommended installation method is with Brew:
 ```
 brew install defenseunicorns/tap/uds
 ```
-UDS CLI binaries are also included with each [Github Release](https://github.com/defenseunicorns/uds-cli/releases)
+UDS CLI binaries are also included with each [Github Release](https://github.com/nicleary/uds-cli/releases)
 
 ## Official Documentation
 Official documentation is located at [uds.defenseunicorns.com/reference/cli/overview/](https://uds.defenseunicorns.com/reference/cli/overview/)
@@ -38,4 +38,4 @@ packages:
 Running `uds create` in the same directory as the above `uds-bundle.yaml` will create a bundle tarball containing both the Zarf init package and podinfo. The bundle can be deployed with `uds deploy`.
 
 ## Contributing
-Build instructions and contributing docs are located in [CONTRIBUTING.md](https://github.com/defenseunicorns/uds-cli/blob/main/CONTRIBUTING.md).
+Build instructions and contributing docs are located in [CONTRIBUTING.md](https://github.com/nicleary/uds-cli/blob/main/CONTRIBUTING.md).

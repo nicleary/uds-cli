@@ -11,9 +11,9 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"github.com/defenseunicorns/uds-cli/src/config"
-	"github.com/defenseunicorns/uds-cli/src/pkg/utils"
-	"github.com/defenseunicorns/uds-cli/src/types"
+	"github.com/nicleary/uds-cli/src/config"
+	"github.com/nicleary/uds-cli/src/pkg/utils"
+	"github.com/nicleary/uds-cli/src/types"
 
 	zarfCLI "github.com/zarf-dev/zarf/src/cmd"
 )

@@ -7,8 +7,8 @@ package cmd
 import (
 	"testing"
 
-	"github.com/defenseunicorns/uds-cli/src/config"
-	"github.com/defenseunicorns/uds-cli/src/types"
+	"github.com/nicleary/uds-cli/src/config"
+	"github.com/nicleary/uds-cli/src/types"
 	"github.com/stretchr/testify/require"
 )
 

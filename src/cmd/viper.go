@@ -9,8 +9,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/defenseunicorns/uds-cli/src/config/lang"
-	"github.com/defenseunicorns/uds-cli/src/pkg/message"
+	"github.com/nicleary/uds-cli/src/config/lang"
+	"github.com/nicleary/uds-cli/src/pkg/message"
 	"github.com/spf13/viper"
 )
 

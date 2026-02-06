@@ -14,9 +14,9 @@ import (
 
 	"github.com/alecthomas/jsonschema"
 	runnerCLI "github.com/defenseunicorns/maru-runner/src/cmd"
-	"github.com/defenseunicorns/uds-cli/src/config/lang"
-	"github.com/defenseunicorns/uds-cli/src/pkg/message"
-	"github.com/defenseunicorns/uds-cli/src/types"
+	"github.com/nicleary/uds-cli/src/config/lang"
+	"github.com/nicleary/uds-cli/src/pkg/message"
+	"github.com/nicleary/uds-cli/src/types"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 )

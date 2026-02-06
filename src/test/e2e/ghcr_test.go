@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/defenseunicorns/uds-cli/src/config"
+	"github.com/nicleary/uds-cli/src/config"
 	"github.com/stretchr/testify/require"
 	"oras.land/oras-go/v2/registry"
 )

@@ -10,11 +10,11 @@ Recommended installation method is with Brew:
 brew tap defenseunicorns/tap && brew install uds
 ```
 
-UDS CLI Binaries are also included with each [Github Release](https://github.com/defenseunicorns/uds-cli/releases)
+UDS CLI Binaries are also included with each [Github Release](https://github.com/nicleary/uds-cli/releases)
 
 ## Contributing
 
-Build instructions and contributing docs are located in [CONTRIBUTING.md](https://github.com/defenseunicorns/uds-cli/blob/main/CONTRIBUTING.md).
+Build instructions and contributing docs are located in [CONTRIBUTING.md](https://github.com/nicleary/uds-cli/blob/main/CONTRIBUTING.md).
 
 ## Quickstart
 
@@ -40,7 +40,7 @@ packages:
 
 The above `UDSBundle` deploys the Zarf init package and podinfo.
 
-The packages referenced in `packages` can exist either locally or in an OCI registry. See [here](https://github.com/defenseunicorns/uds-cli/tree/main/src/test/bundles/03-local-and-remote) for an example that deploys both local and remote Zarf packages. More `UDSBundle` examples can be found in the [src/test/bundles](https://github.com/defenseunicorns/uds-cli/tree/main/src/test/bundles) folder.
+The packages referenced in `packages` can exist either locally or in an OCI registry. See [here](https://github.com/nicleary/uds-cli/tree/main/src/test/bundles/03-local-and-remote) for an example that deploys both local and remote Zarf packages. More `UDSBundle` examples can be found in the [src/test/bundles](https://github.com/nicleary/uds-cli/tree/main/src/test/bundles) folder.
 
 ### Declarative Syntax
 
@@ -291,7 +291,7 @@ packages:
 
 Variables that you want to make available to other packages are in the `export` block of the Zarf package to export a variable from. By default, all exported variables are available to all of the packages in a bundle. To have another package ingest a specific exported variable, like in the case of variable name collisions, use the `imports` key to name both the `variable` and `package` that the variable is exported from, like in the example above.
 
-In the example above, the `OUTPUT` variable is created as part of a Zarf Action in the [output-var](https://github.com/defenseunicorns/uds-cli/tree/main/src/test/packages/no-cluster/output-var) package, and the [receive-var](https://github.com/defenseunicorns/uds-cli/tree/main/src/test/packages/no-cluster/receive-var) package expects a variable called `OUTPUT`.
+In the example above, the `OUTPUT` variable is created as part of a Zarf Action in the [output-var](https://github.com/nicleary/uds-cli/tree/main/src/test/packages/no-cluster/output-var) package, and the [receive-var](https://github.com/nicleary/uds-cli/tree/main/src/test/packages/no-cluster/receive-var) package expects a variable called `OUTPUT`.
 
 ### Sharing Variables Across Multiple Packages
 
@@ -327,7 +327,7 @@ variables:
 
 ## Duplicate Packages And Naming
 
-It is possible to deploy multiple instances of the same Zarf package in a bundle. For example, the following `uds-bundle.yaml` deploys 3 instances of the [helm-overrides](https://github.com/defenseunicorns/uds-cli/blob/main/src/test/packages/helm/zarf.yaml) Zarf packages:
+It is possible to deploy multiple instances of the same Zarf package in a bundle. For example, the following `uds-bundle.yaml` deploys 3 instances of the [helm-overrides](https://github.com/nicleary/uds-cli/blob/main/src/test/packages/helm/zarf.yaml) Zarf packages:
 
 ```yaml
 kind: UDSBundle

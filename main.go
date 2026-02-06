@@ -5,7 +5,7 @@
 package main
 
 import (
-	"github.com/defenseunicorns/uds-cli/src/cmd"
+	"github.com/nicleary/uds-cli/src/cmd"
 )
 
 func main() {

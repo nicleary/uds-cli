@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/defenseunicorns/uds-cli/src/types"
+	"github.com/nicleary/uds-cli/src/types"
 	"github.com/mholt/archives"
 )
 

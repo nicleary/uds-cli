@@ -10,7 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/defenseunicorns/uds-cli/src/config"
+	"github.com/nicleary/uds-cli/src/config"
 	"github.com/mholt/archives"
 )
 

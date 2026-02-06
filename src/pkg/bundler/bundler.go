@@ -7,8 +7,8 @@ package bundler
 import (
 	"context"
 
-	"github.com/defenseunicorns/uds-cli/src/pkg/utils"
-	"github.com/defenseunicorns/uds-cli/src/types"
+	"github.com/nicleary/uds-cli/src/pkg/utils"
+	"github.com/nicleary/uds-cli/src/types"
 )
 
 // Bundler is used for bundling packages

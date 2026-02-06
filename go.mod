@@ -1,4 +1,4 @@
-module github.com/defenseunicorns/uds-cli
+module github.com/nicleary/uds-cli
 
 go 1.25.5
 

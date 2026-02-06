@@ -19,9 +19,9 @@ import (
 	"time"
 
 	"github.com/defenseunicorns/pkg/helpers/v2"
-	"github.com/defenseunicorns/uds-cli/src/config"
-	"github.com/defenseunicorns/uds-cli/src/pkg/message"
-	"github.com/defenseunicorns/uds-cli/src/types"
+	"github.com/nicleary/uds-cli/src/config"
+	"github.com/nicleary/uds-cli/src/pkg/message"
+	"github.com/nicleary/uds-cli/src/types"
 	goyaml "github.com/goccy/go-yaml"
 	"github.com/mholt/archives"
 	"github.com/pterm/pterm"

@@ -7,8 +7,8 @@ package bundle
 import (
 	"testing"
 
-	"github.com/defenseunicorns/uds-cli/src/pkg/utils"
-	"github.com/defenseunicorns/uds-cli/src/types"
+	"github.com/nicleary/uds-cli/src/pkg/utils"
+	"github.com/nicleary/uds-cli/src/types"
 	"github.com/stretchr/testify/require"
 	"github.com/zarf-dev/zarf/src/api/v1alpha1"
 )

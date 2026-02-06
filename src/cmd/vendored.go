@@ -10,12 +10,12 @@ import (
 
 	runnerCLI "github.com/defenseunicorns/maru-runner/src/cmd"
 	runnerConfig "github.com/defenseunicorns/maru-runner/src/config"
-	"github.com/defenseunicorns/uds-cli/src/pkg/message"
+	"github.com/nicleary/uds-cli/src/pkg/message"
 
 	"github.com/defenseunicorns/pkg/exec"
 
-	"github.com/defenseunicorns/uds-cli/src/config"
-	"github.com/defenseunicorns/uds-cli/src/config/lang"
+	"github.com/nicleary/uds-cli/src/config"
+	"github.com/nicleary/uds-cli/src/config/lang"
 	"github.com/spf13/cobra"
 	zarfCLI "github.com/zarf-dev/zarf/src/cmd"
 	zarfConfig "github.com/zarf-dev/zarf/src/config"

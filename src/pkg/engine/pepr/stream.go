@@ -13,8 +13,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/defenseunicorns/uds-cli/src/pkg/message"
-	"github.com/defenseunicorns/uds-cli/src/pkg/style"
+	"github.com/nicleary/uds-cli/src/pkg/message"
+	"github.com/nicleary/uds-cli/src/pkg/style"
 	corev1 "k8s.io/api/core/v1"
 )
 

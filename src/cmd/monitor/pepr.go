@@ -11,9 +11,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/defenseunicorns/uds-cli/src/config/lang"
-	"github.com/defenseunicorns/uds-cli/src/pkg/engine/pepr"
-	"github.com/defenseunicorns/uds-cli/src/pkg/engine/stream"
+	"github.com/nicleary/uds-cli/src/config/lang"
+	"github.com/nicleary/uds-cli/src/pkg/engine/pepr"
+	"github.com/nicleary/uds-cli/src/pkg/engine/stream"
 	"github.com/spf13/cobra"
 )
 
