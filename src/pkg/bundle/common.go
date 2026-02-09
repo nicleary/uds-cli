@@ -361,3 +361,8 @@ func GetDeployedPackageNames() []string {
 	}
 	return deployedPackageNames
 }
+
+// GetPackagesInBundle returns the packages contained within the bundle
+func (b *Bundle) GetPackagesInBundle() []types.Package {
+	return b.bundle.Packages
+}
