@@ -363,6 +363,7 @@ func GetDeployedPackageNames() []string {
 }
 
 // GetPackagesInBundle returns the packages contained within the bundle
+// Useful for exposing package information to external tooling integrating the UDS ecosystem
 func (b *Bundle) GetPackagesInBundle() []types.Package {
 	return b.bundle.Packages
 }
